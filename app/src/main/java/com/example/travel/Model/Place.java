@@ -1,11 +1,11 @@
 package com.example.travel.Model;
 
 public class Place {
-    String name;
-    String[] imgAdress; // max3
-    String detail;
-    double latitude;
-    double longitude;
+    public String name;
+    public String[] imgAdress; // max3
+    public String detail;
+    public double latitude;
+    public double longitude;
 
     public Place(String name, String[] imgAdress, String detail, double latitude, double longitude) {
         this.name = name;
