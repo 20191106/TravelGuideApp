@@ -8,7 +8,6 @@ public class MainHolder {
     TextView filterTv;
     TextView placeTv;
     ImageView mark;
-    LinearLayout stars;
     ImageView star_1;
     ImageView star_2;
     ImageView star_3;

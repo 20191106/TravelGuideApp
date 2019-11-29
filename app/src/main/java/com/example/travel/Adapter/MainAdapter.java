@@ -2,7 +2,7 @@ package com.example.travel.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.travel.Model.Attraction;
 import com.example.travel.R;
+import com.example.travel.Util;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,6 @@ public class MainAdapter extends ArrayAdapter {
         lnf = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.attractions = attractions;
-
     }
 
     @Override
@@ -58,7 +58,6 @@ public class MainAdapter extends ArrayAdapter {
             viewHolder.filterTv = convertView.findViewById(R.id.main_att_filterTv);
             viewHolder.placeTv = convertView.findViewById(R.id.main_att_placeTv);
             viewHolder.mark = convertView.findViewById(R.id.main_att_mark);
-            viewHolder.stars = convertView.findViewById(R.id.main_att_stars);
             viewHolder.star_1 = convertView.findViewById(R.id.main_att_star_1);
             viewHolder.star_2 = convertView.findViewById(R.id.main_att_star_2);
             viewHolder.star_3 = convertView.findViewById(R.id.main_att_star_3);
@@ -85,22 +84,20 @@ public class MainAdapter extends ArrayAdapter {
         if(attractions.get(position).star >= 3) viewHolder.star_3.setVisibility(View.VISIBLE);
         if(attractions.get(position).star >= 4) viewHolder.star_4.setVisibility(View.VISIBLE);
         if(attractions.get(position).star >= 5) viewHolder.star_5.setVisibility(View.VISIBLE);
-        for (int i = 0; i < attractions.get(position).places.size() || i < 5; i++) {
+        for (int i = 0; i < attractions.get(position).places.size() && i < 3; i++) {
             ImageView image = new ImageView(context);
-            ViewGroup.LayoutParams params = image.getLayoutParams();
-            params.width = params.width * dpToPx(context, 90) / params.height;
-            params.height = dpToPx(context, 90);
-            image.setLayoutParams(params);
-            Glide.with(context).load((attractions.get(position)).places.get(i).imgAdress).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(image);
-            viewHolder.stars.addView(image);
+            image.setPadding(0, Util.dpToPx(context, 10), 0, 0);
+            Glide.with(context).load((attractions.get(position)).places.get(i).imgAdress[0]).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).override(10000, Util.dpToPx(context, 90)).into(image);
+            Log.d("ah", "getView: " + i);
+//            ViewGroup.LayoutParams params = image.getLayoutParams();
+//            params.width = params.width * dpToPx(context, 90) / params.height;
+//            params.height = dpToPx(context, 90);
+//            image.setLayoutParams(params);
+            viewHolder.images.addView(image);
         }
 
         return convertView;
     }
 
-    private int dpToPx(Context context, int dp) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return px;
-    }
+
 }

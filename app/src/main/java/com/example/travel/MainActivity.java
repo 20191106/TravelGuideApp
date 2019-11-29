@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,18 +30,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     ArrayList<Attraction> attractions = new ArrayList<>();
 
-    DrawerLayout mainLayout;
     TextView menuTv;
 
     FragMain fragMain = new FragMain();
-    FragImage fragImage = new FragImage();
     FragDetail fragDetail = new FragDetail();
+    FragImage fragImage = new FragImage();
     FragMap fragMap = new FragMap();
 
     int curScr = 0;
     final static int FRAG_MAIN = 0;
-    final static int FRAG_IMAGE = 1;
-    final static int FRAG_DETAIL = 2;
+    final static int FRAG_DETAIL = 1;
+    final static int FRAG_IMAGE = 2;
     final static int FRAG_MAP = 3;
 
     @Override
@@ -48,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainLayout = findViewById(R.id.mainLayout);
-        mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        menuTv.findViewById(R.id.menuTv);
+        menuTv = findViewById(R.id.menuTv);
 
         InitSQL();
         InitData();
@@ -61,15 +59,36 @@ public class MainActivity extends AppCompatActivity {
     public void popMain() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.mainLayout, fragMain);
+        ft.replace(R.id.contentLayout, fragMain);
         ft.commit();
         curScr = FRAG_MAIN;
         menuTv.setText("추천 여행지");
     }
 
+    public void popDetail(int position){
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.contentLayout, fragDetail);
+        ft.commit();
+        fragDetail.setPosition(position);
+        curScr = FRAG_DETAIL;
+        menuTv.setText(attractions.get(position).local);
+    }
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        switch (curScr){
+            case FRAG_MAIN:
+                super.onBackPressed();
+                break;
+            case FRAG_DETAIL:
+                popMain();
+                break;
+            case FRAG_IMAGE:
+                break;
+            case FRAG_MAP:
+                break;
+        }
     }
 
 
@@ -92,10 +111,12 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject data = new JSONObject(response);
                             if (data.getString("result").equals("OK")) {
                                 JSONArray data_list = data.getJSONArray("data_list");
+                                Log.d("ah", "data_list: "+data_list);
                                 for (int i = 0; i < data_list.length(); i++) {
                                     JSONObject now_att = data_list.getJSONObject(i);
                                     JSONArray place_list = now_att.getJSONArray("place");
                                     ArrayList<Place> places = new ArrayList<>();
+                                    Log.d("ah", "place_list: "+place_list);
                                     for (int j = 0; j < place_list.length(); j++) {
                                         JSONObject now_place = place_list.getJSONObject(j);
                                         places.add(new Place(now_place.getString("name"),
@@ -114,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                                                     now_att.getDouble("star"),
                                                     getMark(idx),
                                                     places));
+                                    fragMain.mainAdapter.notifyDataSetChanged();
                                 }
                             }
                         } catch (JSONException e) {

@@ -50,7 +50,8 @@
                 android:id="@+id/advertisement"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:background="@drawable/off_box"/>
         </RelativeLayout>
     </RelativeLayout>
     <LinearLayout

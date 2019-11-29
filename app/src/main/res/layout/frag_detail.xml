@@ -25,6 +25,31 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/detail_star_1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/top_bookmark_on"/>
+        <ImageView
+            android:id="@+id/detail_star_2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/top_bookmark_on"/>
+        <ImageView
+            android:id="@+id/detail_star_3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/top_bookmark_on"/>
+        <ImageView
+            android:id="@+id/detail_star_4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/top_bookmark_on"/>
+        <ImageView
+            android:id="@+id/detail_star_5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/top_bookmark_on"/>
     </LinearLayout>
     <ImageView
         android:id="@+id/detail_mark"
@@ -47,5 +72,12 @@
         android:layout_below="@+id/detail_showListBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"/>
+        android:padding="15dp"
+        android:visibility="gone"/>
+    <ListView
+        android:id="@+id/detail_listView"
+        android:layout_below="@+id/detail_showListBtn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"/>
 </RelativeLayout>

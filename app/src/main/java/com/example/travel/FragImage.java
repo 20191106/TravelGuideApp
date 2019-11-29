@@ -5,16 +5,46 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.travel.Adapter.ImagePageAdapter;
+import com.example.travel.Model.Place;
 
 public class FragImage extends BaseFragment {
+    Place place;
+
+    public void setPlace(Place place){
+        this.place = place;
+    }
+
+    ViewPager pager;
+    TextView text;
+    ImageView mapBtn;
+
+    ImagePageAdapter ipAdapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frag_image, container, false);
         final MainActivity m = ((MainActivity)getActivity());
+
+        pager = v.findViewById(R.id.image_pager);
+        text = v.findViewById(R.id.image_text);
+        mapBtn = v.findViewById(R.id.image_mapBtn);
+
+        text.setText(place.detail);
+        Glide.with(m).load(R.drawable.map_icon).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mapBtn);
+
+        ipAdapter = new ImagePageAdapter(getFragmentManager(), place.imgAdress);
+        pager.setAdapter(ipAdapter);
 
         return v;
     }
