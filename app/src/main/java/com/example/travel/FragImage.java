@@ -19,9 +19,14 @@ import com.example.travel.Model.Place;
 
 public class FragImage extends BaseFragment {
     Place place;
+    int position_att;
 
     public void setPlace(Place place){
         this.place = place;
+    }
+
+    public void setPosition_att(int position_att) {
+        this.position_att = position_att;
     }
 
     ViewPager pager;
@@ -42,6 +47,13 @@ public class FragImage extends BaseFragment {
 
         text.setText(place.detail);
         Glide.with(m).load(R.drawable.map_icon).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mapBtn);
+
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m.popMap(place, position_att);
+            }
+        });
 
         ipAdapter = new ImagePageAdapter(getFragmentManager(), place.imgAdress);
         pager.setAdapter(ipAdapter);

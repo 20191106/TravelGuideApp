@@ -65,14 +65,37 @@ public class MainActivity extends AppCompatActivity {
         menuTv.setText("추천 여행지");
     }
 
-    public void popDetail(int position){
+    public void popDetail(Attraction attraction, int position_att){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+        fragDetail.setAttraction(attraction);
+        fragDetail.setPosition_att(position_att);
         ft.replace(R.id.contentLayout, fragDetail);
         ft.commit();
-        fragDetail.setPosition(position);
         curScr = FRAG_DETAIL;
-        menuTv.setText(attractions.get(position).local);
+        menuTv.setText(attraction.local);
+    }
+
+    public void popImage(Place place, int position_att) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        fragImage.setPlace(place);
+        fragImage.setPosition_att(position_att);
+        ft.replace(R.id.contentLayout, fragImage);
+        ft.commit();
+        curScr = FRAG_IMAGE;
+        menuTv.setText(place.name);
+    }
+
+    public void popMap(Place place, int position_att) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        fragMap.setPlace(place);
+        fragMap.setPosition_att(position_att);
+        ft.replace(R.id.contentLayout, fragMap);
+        ft.commit();
+        curScr = FRAG_MAP;
+        menuTv.setText(place.name);
     }
 
     @Override
@@ -85,8 +108,10 @@ public class MainActivity extends AppCompatActivity {
                 popMain();
                 break;
             case FRAG_IMAGE:
+                popDetail(attractions.get(fragImage.position_att), fragImage.position_att);
                 break;
             case FRAG_MAP:
+                popDetail(attractions.get(fragMap.position_att), fragMap.position_att);
                 break;
         }
     }

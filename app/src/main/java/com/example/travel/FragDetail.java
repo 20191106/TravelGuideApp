@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.travel.Adapter.DetailListAdapter;
 import com.example.travel.Adapter.DetailPageAdapter;
+import com.example.travel.Model.Attraction;
 
 public class FragDetail extends BaseFragment {
     TextView filterTv;
@@ -40,12 +41,18 @@ public class FragDetail extends BaseFragment {
     DetailPageAdapter dpAdapter;
     DetailListAdapter dlAdapter;
 
-    int position;
+    Attraction attraction;
 
-    public void setPosition(int position){
-        this.position = position;
+    int position_att;
+
+    public void setAttraction(Attraction attraction) {
+        this.attraction = attraction;
     }
-    
+
+    public void setPosition_att(int position_att) {
+        this.position_att = position_att;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,20 +72,20 @@ public class FragDetail extends BaseFragment {
         pager = v.findViewById(R.id.detail_pager);
         listView = v.findViewById(R.id.detail_listView);
 
-        filterTv.setText(m.attractions.get(position).category);
-        placeTv.setText(m.attractions.get(position).local);
-        if(m.attractions.get(position).isMarked) Glide.with(m).load(R.drawable.top_bookmark_on).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mark);
+        filterTv.setText(attraction.category);
+        placeTv.setText(attraction.local);
+        if(attraction.isMarked) Glide.with(m).load(R.drawable.top_bookmark_on).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mark);
         else Glide.with(m).load(R.drawable.top_bookmark_off).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mark);
         star_1.setVisibility(View.GONE);
         star_2.setVisibility(View.GONE);
         star_3.setVisibility(View.GONE);
         star_4.setVisibility(View.GONE);
         star_5.setVisibility(View.GONE);
-        if(m.attractions.get(position).star >= 1) star_1.setVisibility(View.VISIBLE);
-        if(m.attractions.get(position).star >= 2) star_2.setVisibility(View.VISIBLE);
-        if(m.attractions.get(position).star >= 3) star_3.setVisibility(View.VISIBLE);
-        if(m.attractions.get(position).star >= 4) star_4.setVisibility(View.VISIBLE);
-        if(m.attractions.get(position).star >= 5) star_5.setVisibility(View.VISIBLE);
+        if(attraction.star >= 1) star_1.setVisibility(View.VISIBLE);
+        if(attraction.star >= 2) star_2.setVisibility(View.VISIBLE);
+        if(attraction.star >= 3) star_3.setVisibility(View.VISIBLE);
+        if(attraction.star >= 4) star_4.setVisibility(View.VISIBLE);
+        if(attraction.star >= 5) star_5.setVisibility(View.VISIBLE);
 
         Glide.with(m).load(R.drawable.top_list).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).override(1000, Util.dpToPx(m, 50)).into(showListBtn);
         Glide.with(m).load(R.drawable.top_view).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).override(1000, Util.dpToPx(m, 50)).into(showViewBtn);
@@ -98,22 +105,21 @@ public class FragDetail extends BaseFragment {
             }
         });
 
-        dpAdapter = new DetailPageAdapter(m.getSupportFragmentManager(), m.attractions.get(position).places);
+        dpAdapter = new DetailPageAdapter(m.getSupportFragmentManager(), attraction.places);
         pager.setAdapter(dpAdapter);
         pager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //pager.getCurrentItem()
-                //TODO
+                m.popImage(attraction.places.get(pager.getCurrentItem()), position_att);
             }
         });
 
-        dlAdapter = new DetailListAdapter(m, m.attractions.get(position).places);
+        dlAdapter = new DetailListAdapter(m, attraction.places);
         listView.setAdapter(dlAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO
+                m.popImage(attraction.places.get(position), position_att);
             }
         });
 

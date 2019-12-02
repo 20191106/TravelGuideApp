@@ -32,7 +32,7 @@ public class FragMain extends BaseFragment {
         main_attLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                m.popDetail(position);
+                m.popDetail(m.attractions.get(position), position);
             }
         });
 
