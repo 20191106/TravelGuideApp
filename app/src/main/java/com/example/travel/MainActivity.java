@@ -1,7 +1,6 @@
 package com.example.travel;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -43,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     final static int FRAG_IMAGE = 2;
     final static int FRAG_MAP = 3;
 
+    boolean isLoadingEnd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         menuTv = findViewById(R.id.menuTv);
 
         InitSQL();
-        InitData();
+        isLoadingEnd = loadData(20);
 
         popMain();
     }
@@ -124,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
     //-------------------------------------
 
 
-    private void InitData() {
+    public boolean loadData(int loadNum) {
         RequestQueue stringRequest = Volley.newRequestQueue(this);
-        String temp = "http://jeho.dothome.co.kr/myDir/travel/get_att.php";
+        String temp = "http://jeho.dothome.co.kr/myDir/travel/get_att.php?loadNum=" + loadNum;
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 temp,
                 new Response.Listener<String>() {
@@ -134,6 +135,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONObject data = new JSONObject(response);
+                            if (data.getString("isend").equals("TRUE")) {
+                                isLoadingEnd = true;
+                            }
+                            else {
+                                isLoadingEnd = false;
+                            }
                             if (data.getString("result").equals("OK")) {
                                 JSONArray data_list = data.getJSONArray("data_list");
                                 Log.d("ah", "data_list: "+data_list);
@@ -161,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                                                     getMark(idx),
                                                     places));
                                     fragMain.mainAdapter.notifyDataSetChanged();
+                                    Log.d("ah", "onCreate1: " + attractions.size());
                                 }
                             }
                         } catch (JSONException e) {
@@ -175,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         stringRequest.add(myReq);
+        return isLoadingEnd;
     }
 
     private void InitSQL() {//init

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -17,6 +18,10 @@ import com.example.travel.Adapter.MainAdapter;
 public class FragMain extends BaseFragment {
     ListView main_attLv;
     MainAdapter mainAdapter;
+
+    boolean lastitemVisibleFlag = false;
+    int count = 40;
+    boolean isLoadingEnd = false;
 
     @Nullable
     @Override
@@ -33,6 +38,26 @@ public class FragMain extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 m.popDetail(m.attractions.get(position), position);
+            }
+        });
+
+        isLoadingEnd = m.isLoadingEnd;
+
+        main_attLv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastitemVisibleFlag){
+                    if(!isLoadingEnd){
+                        isLoadingEnd = m.loadData(count);
+                        count += 20;
+                    }
+                    mainAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                lastitemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
             }
         });
 

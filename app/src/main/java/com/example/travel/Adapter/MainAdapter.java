@@ -88,11 +88,6 @@ public class MainAdapter extends ArrayAdapter {
             ImageView image = new ImageView(context);
             image.setPadding(0, Util.dpToPx(context, 10), 0, 0);
             Glide.with(context).load((attractions.get(position)).places.get(i).imgAdress[0]).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).override(10000, Util.dpToPx(context, 90)).into(image);
-            Log.d("ah", "getView: " + i);
-//            ViewGroup.LayoutParams params = image.getLayoutParams();
-//            params.width = params.width * dpToPx(context, 90) / params.height;
-//            params.height = dpToPx(context, 90);
-//            image.setLayoutParams(params);
             viewHolder.images.addView(image);
         }
 
